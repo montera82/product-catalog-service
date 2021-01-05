@@ -1,13 +1,13 @@
-import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
+import { expect as expectCDK, matchTemplate, MatchStyle, haveResource } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import * as CdkFiles from '../lib/product-catalog-service-stack';
+import * as PStack from '../lib/product-catalog-service-stack';
 
-test('Empty Stack', () => {
+test('Test Infrastructure resources', () => {
     const app = new cdk.App();
     // WHEN
-    const stack = new CdkFiles.ProductCatalogServiceStack(app, 'MyTestStack');
+    const stack = new PStack.ProductCatalogServiceStack(app, 'ProductCatalogServiceStack');
     // THEN
-    expectCDK(stack).to(matchTemplate({
-      "Resources": {}
-    }, MatchStyle.EXACT))
+    expectCDK(stack).to(haveResource('AWS::DynamoDB::Table', {
+      TableName: 'ProductsTable'
+    }));
 });
